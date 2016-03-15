@@ -13,14 +13,23 @@ var secretNumber = computerPick(1, 100);
 var counter = 0
 
 
-//SECOND - declare the functions:
+//SECOND - create the functions:
 
 //function for computer to generate secret number between 1 and 100 (Math.random)
 function computerPick(min, max) {
     var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
     return randomNumber;
 }
-
+//function to supply user with list of #s guessed and append as <li> to <ul -id = "guessList">
+function userGuessList(userGuess, secretNumber) {
+    if (userGuess != secretNumber) {
+        $('#guessList').append("<li>" + userGuess + "</li>");
+    }
+}
+//functon to count number of guesses and give feedback in <span id="count">
+function guessCounter(userGuess) {
+    $('#count').text(counter);
+}
 //function to give userfeedback in <div id="feedback">
 function userFeedback(userGuess, secretNumber) {
     var difference = Math.abs(userGuess - secretNumber);
@@ -35,7 +44,7 @@ function userFeedback(userGuess, secretNumber) {
     } else if (difference > 0) {
         $('#feedback').text("You're smokin'! Try again!");
     } else {
-        $('#feedback').text("You win!!!");
+        $('#feedback').text("Congratulatons! You got it!");
     }
 }
 
@@ -44,16 +53,15 @@ function validate(userGuess) {
     var userGuessCorrectFlag = true;
 
     while (userGuess.length < 1) {
-        var userGuess = prompt("Please enter 1 digit or more.");
+        var userGuess = confirm("Please enter 1 digit or more.");
         userGuessCorrectFlag = false;
     }
-    while (userGuess > 101) {
-        var userGuess = prompt("Please enter a number no larger than 100.")
+    while (userGuess > 100) {
+        var userGuess = confirm("Please enter a number from 1 to 100!.");
         userGuessCorrectFlag = false;
     }
-
     while (Math.floor(userGuess) != userGuess) {
-        var userGuess = prompt("Your guess was not a number. Set it again.");
+        var userGuess = confirm("Your guess was not a whole number. Set it again.");
         userGuessCorrectFlag = false;
     }
     if (userGuessCorrectFlag == true) {
@@ -65,19 +73,6 @@ function validate(userGuess) {
     }
 }
 
-//function to supply user with list of nos. guessed; append as <li> to <ul -id = "guessList">
-function userGuessList(userGuess, secretNumber) {
-    if (userGuess != secretNumber) {
-        $('#guessList').append("<li>" + userGuess + "</li>");
-    }
-}
-
-//functon to count number of guesses and give feedback in <span id="count">
-function guessCounter(userGuess) {
-    $('#count').text(counter);
-}
-
-
 //function to cause clicking "New Game" to trigger JavaScript function that starts a new game
 function startNewGame() {
     //document.location.reload(true);
@@ -85,7 +80,8 @@ function startNewGame() {
         $('#count').text(0);
         counter = 0;
         $('#guessList').empty();
-        $('#feedback').text("Make your Guess!")
+        $('#feedback').text("Make your Guess!");
+
     });
 }
 
@@ -97,7 +93,6 @@ $(document).ready(function () {
     $('#guessButton').on('click', function () {
         //first get the value that user added in the input box
         var userGuess = $('#userGuess').val();
-        var newGuess = userGuess;
         validate(userGuess);
     });
 
